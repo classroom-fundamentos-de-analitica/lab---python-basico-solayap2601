@@ -21,10 +21,23 @@ def pregunta_01():
     214
 
     """
-    return
+    
+    with open("data.csv", 'r') as file:
+        timesheet = file.readlines()
+    
+    timesheet = [row.replace('\n', '') for row in timesheet]
+    timesheet = [row.replace('\t', ',') for row in timesheet]
+    timesheet = [row.split(',') for row in timesheet]
+    
+    suma = 0
 
+    for i in range(len(timesheet)):
+        suma += int(timesheet[i][1])    
+
+    return suma
 
 def pregunta_02():
+    
     """
     Retorne la cantidad de registros por cada letra de la primera columna como la lista
     de tuplas (letra, cantidad), ordendas alfabéticamente.
@@ -39,8 +52,30 @@ def pregunta_02():
     ]
 
     """
-    return
+    with open("data.csv", 'r') as file:
+        timesheet = file.readlines()
+    
+    timesheet = [row.replace('\n', '') for row in timesheet]
+    timesheet = [row.replace('\t', ',') for row in timesheet]
+    timesheet = [row.split(',') for row in timesheet]
+    
+    resultado = []
+    resultado.append([timesheet[0][0], 1])
 
+    for i in range(1, len(timesheet)):
+        encontrado = False
+        for j in range(len(resultado)):
+            if resultado[j][0] == timesheet[i][0]:
+                resultado[j][1] += 1
+                encontrado = True
+                break
+        
+        if not encontrado:
+            resultado.append([timesheet[i][0], 1])
+
+    resultado = [tuple(x) for x in resultado]
+    resultado.sort()
+    return resultado
 
 def pregunta_03():
     """
@@ -57,7 +92,30 @@ def pregunta_03():
     ]
 
     """
-    return
+    with open("data.csv", 'r') as file:
+        timesheet = file.readlines()
+    
+    timesheet = [row.replace('\n', '') for row in timesheet]
+    timesheet = [row.replace('\t', ',') for row in timesheet]
+    timesheet = [row.split(',') for row in timesheet]
+    
+    resultado = []
+    resultado.append([timesheet[0][0], int(timesheet[0][1])])
+
+    for i in range(1, len(timesheet)):
+        encontrado = False
+        for j in range(len(resultado)):
+            if resultado[j][0] == timesheet[i][0]:
+                resultado[j][1] += int(timesheet[i][1])
+                encontrado = True
+                break
+        
+        if not encontrado:
+            resultado.append([timesheet[i][0], int(timesheet[i][1])])
+
+    resultado = [tuple(x) for x in resultado]
+    resultado.sort()
+    return resultado
 
 
 def pregunta_04():
@@ -82,8 +140,30 @@ def pregunta_04():
     ]
 
     """
-    return
+    with open("data.csv", 'r') as file:
+        timesheet = file.readlines()
+    
+    timesheet = [row.replace('\n', '') for row in timesheet]
+    timesheet = [row.replace('\t', ',') for row in timesheet]
+    timesheet = [row.split(',') for row in timesheet]
+    
+    resultado = []
+    resultado.append([timesheet[0][2].split('-')[1], 1])
+    
+    for i in range(1, len(timesheet)):
+        encontrado = False
+        fecha = timesheet[i][2].split('-')
+        for j in range(len(resultado)):
+            if resultado[j][0] == fecha[1]:
+                resultado[j][1] += 1
+                encontrado = True
+                break
+        if not encontrado:
+            resultado.append([fecha[1], 1])
 
+    resultado = [tuple(x) for x in resultado]
+    resultado.sort()
+    return resultado
 
 def pregunta_05():
     """
@@ -100,8 +180,34 @@ def pregunta_05():
     ]
 
     """
-    return
+    with open("data.csv", 'r') as file:
+        timesheet = file.readlines()
+    
+    timesheet = [row.replace('\n', '') for row in timesheet]
+    timesheet = [row.replace('\t', ',') for row in timesheet]
+    timesheet = [row.split(',') for row in timesheet]
+    
+    resultado = []
+    resultado.append([timesheet[0][0], int(timesheet[0][1]), int(timesheet[0][1])])
 
+    for i in range(1, len(timesheet)):
+        encontrado = False
+        for j in range(len(resultado)):
+            if timesheet[i][0] == resultado[j][0]:
+                if int(timesheet[i][1]) > resultado[j][1]:
+                    resultado[j][1] = int(timesheet[i][1])
+                elif int(timesheet[i][1]) < resultado[j][2]:
+                    resultado[j][2] = int(timesheet[i][1])
+                encontrado = True
+                break
+        
+        if not encontrado:
+            print(timesheet[i][0])
+            resultado.append([timesheet[i][0], int(timesheet[i][1]), int(timesheet[i][1])])
+
+    resultado = [tuple(x) for x in resultado]
+    resultado.sort()
+    return resultado
 
 def pregunta_06():
     """
@@ -125,7 +231,39 @@ def pregunta_06():
     ]
 
     """
-    return
+    with open("data.csv", 'r') as file:
+        timesheet = file.readlines()
+    
+    timesheet = [row.replace('\n', '') for row in timesheet]
+    timesheet = [row.replace(',', ':') for row in timesheet]
+    timesheet = [row.replace('\t', ',') for row in timesheet]
+    timesheet = [row.split(',') for row in timesheet]
+    
+    resultado = []
+    resultado.append([timesheet[0][4].split(':')[0], int(timesheet[0][4].split(':')[1]), int(timesheet[0][4].split(':')[1])])
+
+    for i in range(len(timesheet)):
+        registro = timesheet[i][4].split(':')
+        inicio = 0
+        if i == 0:
+            inicio = 2
+        for k in range(inicio, len(registro), 2):
+            encontrado = False
+            for j in range(len(resultado)):
+                if resultado[j][0] == registro[k]:
+                    if int(registro[k + 1]) > resultado[j][2]:
+                        resultado[j][2] = int(registro[k + 1])
+                    elif int(registro[k + 1]) < resultado[j][1]:
+                        resultado[j][1] = int(registro[k + 1])
+                    encontrado = True
+                    break
+        
+            if not encontrado:
+                resultado.append([registro[k], int(registro[k + 1]), int(registro[k + 1])])
+
+    resultado = [tuple(x) for x in resultado]
+    resultado.sort()
+    return resultado
 
 
 def pregunta_07():
@@ -149,8 +287,30 @@ def pregunta_07():
     ]
 
     """
-    return
+    with open("data.csv", 'r') as file:
+        timesheet = file.readlines()
+    
+    timesheet = [row.replace('\n', '') for row in timesheet]
+    timesheet = [row.replace('\t', ',') for row in timesheet]
+    timesheet = [row.split(',') for row in timesheet]
+    
+    resultado = []
+    resultado.append([int(timesheet[0][1]), [timesheet[0][0]]])
 
+    for i in range(1, len(timesheet)):
+        encontrado = False
+        for j in range(len(resultado)):
+            if resultado[j][0] == int(timesheet[i][1]):
+                resultado[j][1].append(timesheet[i][0])
+                encontrado = True
+                break
+        
+        if not encontrado:
+            resultado.append([int(timesheet[i][1]), [timesheet[i][0]]])
+
+    resultado = [tuple(x) for x in resultado]
+    resultado.sort()
+    return resultado
 
 def pregunta_08():
     """
@@ -174,8 +334,32 @@ def pregunta_08():
     ]
 
     """
-    return
+    with open("data.csv", 'r') as file:
+        timesheet = file.readlines()
+    
+    timesheet = [row.replace('\n', '') for row in timesheet]
+    timesheet = [row.replace('\t', ',') for row in timesheet]
+    timesheet = [row.split(',') for row in timesheet]
+    
+    resultado = []
+    resultado.append([int(timesheet[0][1]), [timesheet[0][0]]])
 
+    for i in range(1, len(timesheet)):
+        encontrado = False
+        for j in range(len(resultado)):
+            if resultado[j][0] == int(timesheet[i][1]):
+                if timesheet[i][0] not in resultado[j][1]:
+                    resultado[j][1].append(timesheet[i][0])
+                encontrado = True
+                break
+        
+        if not encontrado:
+            resultado.append([int(timesheet[i][1]), [timesheet[i][0]]])
+
+    resultado = [[x[0], sorted(x[1])] for x in resultado]
+    resultado = [tuple(x) for x in resultado]
+    resultado.sort()
+    return resultado
 
 def pregunta_09():
     """
@@ -197,8 +381,38 @@ def pregunta_09():
     }
 
     """
-    return
+    with open("data.csv", 'r') as file:
+        timesheet = file.readlines()
+    
+    timesheet = [row.replace('\n', '') for row in timesheet]
+    timesheet = [row.replace(',', ':') for row in timesheet]
+    timesheet = [row.replace('\t', ',') for row in timesheet]
+    timesheet = [row.split(',') for row in timesheet]
+    
+    resultado = {}
+    resultado[timesheet[0][4].split(':')[0]] = 1
 
+    for i in range(len(timesheet)):
+        registro = timesheet[i][4].split(':')
+        inicio = 0
+        if i == 0:
+            inicio = 2
+        for k in range(inicio, len(registro), 2):
+            encontrado = False
+            for j in resultado:
+                if j == registro[k]:
+                    resultado[j] += 1
+                    encontrado = True
+                    break
+        
+            if not encontrado:
+                resultado[registro[k]] = 1
+    resultado1 = sorted(resultado)
+    resultado2 = {}
+    
+    for i in resultado1:
+        resultado2[i] = resultado[i]
+    return resultado2
 
 def pregunta_10():
     """
@@ -218,8 +432,20 @@ def pregunta_10():
 
 
     """
-    return
+    with open("data.csv", 'r') as file:
+        timesheet = file.readlines()
+    
+    timesheet = [row.replace('\n', '') for row in timesheet]
+    timesheet = [row.replace(',', '-') for row in timesheet]
+    timesheet = [row.replace('\t', ',') for row in timesheet]
+    timesheet = [row.split(',') for row in timesheet]
+    
+    resultado = []
 
+    for i in range(len(timesheet)):
+        resultado.append((timesheet[i][0], len(timesheet[i][3].split('-')), len(timesheet[i][4].split('-'))))
+
+    return resultado
 
 def pregunta_11():
     """
@@ -239,8 +465,42 @@ def pregunta_11():
 
 
     """
-    return
-
+    with open("data.csv", 'r') as file:
+        timesheet = file.readlines()
+    
+    timesheet = [row.replace('\n', '') for row in timesheet]
+    timesheet = [row.replace(',', '-') for row in timesheet]
+    timesheet = [row.replace('\t', ',') for row in timesheet]
+    timesheet = [row.split(',') for row in timesheet]
+    
+    resultado = []
+    resultado.append([timesheet[0][3].split('-')[0], int(timesheet[0][1])])
+    
+    for i in range(len(timesheet)):
+        columna4 = timesheet[i][3].split('-')
+        inicio = 0
+        if i == 0:
+            inicio = 1
+                    
+        for k in range(inicio, len(columna4)):
+            encontrado = False
+            
+            for j in range(len(resultado)):
+                if resultado[j][0] == columna4[k]:
+                    resultado[j][1] += int(timesheet[i][1])
+                    encontrado = True
+                    break
+        
+            if not encontrado:
+                resultado.append([columna4[k], int(timesheet[i][1])])
+    
+    resultado.sort()
+    resultado1 = {}
+    
+    for i in resultado:
+        resultado1[i[0]] = i[1]
+    
+    return resultado1
 
 def pregunta_12():
     """
@@ -257,4 +517,41 @@ def pregunta_12():
     }
 
     """
-    return
+    with open("data.csv", 'r') as file:
+        timesheet = file.readlines()
+    
+    timesheet = [row.replace('\n', '') for row in timesheet]
+    timesheet = [row.replace(',', ':') for row in timesheet]
+    timesheet = [row.replace('\t', ',') for row in timesheet]
+    timesheet = [row.split(',') for row in timesheet]
+    
+    resultado = []
+    resultado.append([timesheet[0][0], int(timesheet[0][4].split(':')[1])])
+    
+    for i in range(len(timesheet)):
+        columna5 = timesheet[i][4].split(':')
+        inicio = 1
+        
+        if i == 0:
+            inicio = 3
+                    
+        for k in range(inicio, len(columna5), 2):
+            encontrado = False
+
+            for j in range(len(resultado)):
+                if resultado[j][0] == timesheet[i][0]:
+                    resultado[j][1] += int(columna5[k])
+                    encontrado = True
+                    break
+        
+            if not encontrado:
+                resultado.append([timesheet[i][0], int(columna5[k])])
+    
+    resultado.sort()
+    resultado1 = {}
+    
+    for i in resultado:
+        resultado1[i[0]] = i[1]
+    
+    return resultado1
+
